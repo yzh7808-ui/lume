@@ -1,5 +1,7 @@
 import { Link, Route, Routes } from 'react-router-dom';
 import { HomePage } from './pages/HomePage';
+import { SearchPage } from './pages/SearchPage';
+import { WeeklyReflectionPage } from './pages/WeeklyReflectionPage';
 
 export default function App() {
   return (
@@ -12,6 +14,8 @@ export default function App() {
           <nav className="flex gap-4 text-sm text-slate-300">
             <Link to="/" className="hover:text-white">Home</Link>
             <Link to="/notes" className="hover:text-white">Notes</Link>
+            <Link to="/search" className="hover:text-white">Search</Link>
+            <Link to="/reflection" className="hover:text-white">Reflection</Link>
           </nav>
         </div>
       </header>
@@ -20,6 +24,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/notes" element={<HomePage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/reflection" element={<WeeklyReflectionPage />} />
         </Routes>
       </main>
     </div>
