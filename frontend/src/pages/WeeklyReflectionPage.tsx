@@ -53,36 +53,38 @@ export function WeeklyReflectionPage() {
   );
 
   return (
-    <div className="space-y-6">
-      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 shadow-xl shadow-slate-950/30">
-        <h1 className="mb-2 text-2xl font-semibold text-white">Weekly reflection</h1>
-        <p className="text-slate-300">{summary}</p>
-      </div>
+    <div className="mx-auto max-w-5xl space-y-6">
+      <section className="rounded-[26px] border border-[#e7e2db] bg-[#fffdfb] p-6 shadow-[0_10px_24px_rgba(32,33,37,0.06)]">
+        <h1 className="text-3xl font-bold tracking-[-0.05em] text-[#1f2937]">Weekly reflection</h1>
+        <p className="mt-3 max-w-3xl text-[17px] leading-8 text-[#4b5563]">{summary}</p>
+      </section>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-          <h2 className="mb-4 text-lg font-semibold text-white">Core themes</h2>
+        <section className="rounded-[24px] border border-[#e7e2db] bg-[#fffdfb] p-6 shadow-[0_10px_24px_rgba(32,33,37,0.06)]">
+          <h2 className="mb-5 text-2xl font-semibold tracking-[-0.04em] text-[#1f2937]">Core themes</h2>
           <div className="flex flex-wrap gap-2">
             {notes.length === 0 ? (
-              <span className="text-slate-400">No themes available yet.</span>
+              <span className="text-[#6b7280]">No themes available yet.</span>
             ) : (
               [...new Set(notes.flatMap((note) => note.tags || []))].slice(0, 8).map((tag) => (
-                <span key={tag} className="rounded-full bg-indigo-500/15 px-3 py-1 text-xs font-medium text-indigo-200">
+                <span key={tag} className="rounded-full bg-[#eef1ff] px-3 py-1.5 text-xs font-bold text-[#586fe7]">
                   #{tag}
                 </span>
               ))
             )}
           </div>
-        </div>
+        </section>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-          <h2 className="mb-4 text-lg font-semibold text-white">Reflection prompts</h2>
-          <ul className="space-y-2 text-sm text-slate-300">
+        <section className="rounded-[24px] border border-[#e7e2db] bg-[#fffdfb] p-6 shadow-[0_10px_24px_rgba(32,33,37,0.06)]">
+          <h2 className="mb-5 text-2xl font-semibold tracking-[-0.04em] text-[#1f2937]">Reflection prompts</h2>
+          <ul className="space-y-3 text-[15px] leading-7 text-[#4b5563]">
             {questions.map((question) => (
-              <li key={question}>• {question}</li>
+              <li key={question} className="rounded-2xl border border-[#e7e2db] bg-[#f3efe9] px-4 py-3">
+                • {question}
+              </li>
             ))}
           </ul>
-        </div>
+        </section>
       </div>
     </div>
   );

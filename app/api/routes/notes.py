@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Query
+from sqlalchemy import or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_db
@@ -68,4 +69,7 @@ async def search_notes(
     db: AsyncSession = Depends(get_db),
 ):
     service = NoteService(db)
+    keyword_results = await service.search_keyword(user_id=user_id, query=query, limit=limit)
+    if keyword_results:
+        return keyword_results
     return service.search_similar(user_id=user_id, query=query, limit=limit)

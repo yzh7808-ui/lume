@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.note import Note, Tag
@@ -14,6 +14,21 @@ class NoteService:
         self.session = session
         self.embedding_service = EmbeddingService()
         self.llm_service = LLMService()
+
+    def _serialize_for_search(self, note: Note, score: float = 1.0):
+        return {
+            "id": note.id,
+            "score": score,
+            "payload": {
+                "note_id": note.id,
+                "title": note.title,
+                "summary": note.summary,
+                "category": note.category,
+                "mood": note.mood,
+                "source": note.source,
+                "user_id": note.user_id,
+            },
+        }
 
     async def create_note(self, payload: NoteCreate) -> Note:
         note = Note(
@@ -74,6 +89,27 @@ class NoteService:
             .limit(limit)
         )
         return result.scalars().all()
+
+    async def search_keyword(self, user_id: str, query: str, limit: int = 5):
+        if not query or not query.strip():
+            return []
+
+        search_term = f"%{query.strip()}%"
+        result = await self.session.execute(
+            select(Note)
+            .where(Note.user_id == user_id)
+            .where(
+                or_(
+                    Note.title.ilike(search_term),
+                    Note.content.ilike(search_term),
+                    Note.summary.ilike(search_term),
+                )
+            )
+            .order_by(Note.created_at.desc())
+            .limit(limit)
+        )
+        notes = result.scalars().all()
+        return [self._serialize_for_search(note, score=1.0) for note in notes]
 
     def search_similar(self, user_id: str, query: str, limit: int = 5):
         return self.embedding_service.search_similar(user_id=user_id, query=query, limit=limit)
